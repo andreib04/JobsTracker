@@ -1,4 +1,5 @@
-﻿using JobsTracker.Application.DTOs.JobDTOs;
+﻿using JobsTracker.Application.Common;
+using JobsTracker.Application.DTOs.JobDTOs;
 using JobsTracker.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace JobsTracker.API.Controllers
         {
             var userId = GetUserId();
             var jobs = await _jobService.GetUserJobsAsync(userId);
-            return Ok(jobs);
+            return Ok(ApiResponse<IEnumerable<JobDto>>.SuccessResponse(jobs));
         }
 
         [HttpPost]
@@ -33,7 +34,7 @@ namespace JobsTracker.API.Controllers
         {
             var userId = GetUserId();
             var jobId = await _jobService.CreateJobAsync(userId, dto);
-            return Ok(jobId);
+            return Ok(ApiResponse<Guid>.SuccessResponse(jobId, "Job created successfully"));
         }
 
         [HttpPut("{id}")]
@@ -41,7 +42,7 @@ namespace JobsTracker.API.Controllers
         {
             var userId = GetUserId();
             await _jobService.UpdateJobStatusAsync(id, userId, status);
-            return NoContent();
+            return Ok(ApiResponse<string>.SuccessResponse("", "Job status updated successfully"));
         }
 
         [HttpDelete("{id}")]
@@ -49,7 +50,7 @@ namespace JobsTracker.API.Controllers
         {
             var userId = GetUserId();
             await _jobService.DeleteJobAsync(id, userId);
-            return NoContent();
+            return Ok(ApiResponse<string>.SuccessResponse("", "Job deleted successfully"));
         }
     }
 }

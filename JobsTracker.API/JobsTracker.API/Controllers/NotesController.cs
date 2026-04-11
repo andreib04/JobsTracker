@@ -1,4 +1,5 @@
-﻿using JobsTracker.Application.DTOs;
+﻿using JobsTracker.Application.Common;
+using JobsTracker.Application.DTOs;
 using JobsTracker.Application.Interfaces;
 using JobsTracker.Application.UseCases;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace JobsTracker.API.Controllers
         public async Task<IActionResult> GetNotes(Guid jobId)
         {
             var notes = await _noteService.GetNotesAsync(jobId);
-            return Ok(notes);
+            return Ok(ApiResponse<List<string>>.SuccessResponse(notes));
         }
 
         [HttpPost]
