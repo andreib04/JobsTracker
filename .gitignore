@@ -363,6 +363,7 @@ MigrationBackup/
 FodyWeavers.xsd
 
 bin/
+logs/
 .vs/
 *.user
 *.suo
@@ -370,3 +371,4 @@ appsettings.Development.json
 
 appsettings.*.json
 !appsettings.json
+
