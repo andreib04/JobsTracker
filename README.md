@@ -116,7 +116,7 @@ Validation errors:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/JobsTracker.git
+git clone https://github.com/andreib04/JobsTracker.git
 cd JobsTracker
 ```
 
