@@ -1,9 +1,24 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using JobsTracker.API.Extensions;
 using JobsTracker.API.Middleware;
+using JobsTracker.Application.Validators;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//Validation services
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterUserDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateJobValidator>();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
+//
+
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddSwaggerWithAuth();

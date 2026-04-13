@@ -19,6 +19,23 @@ namespace JobsTracker.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState
+                    .Where(x => x.Value!.Errors.Count > 0)
+                    .ToDictionary(
+                        kvp => kvp.Key,
+                        kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Validation failed",
+                    errors
+                });
+            }
+
             await _authService.RegisterAsync(dto);
             return Ok(ApiResponse<string>.SuccessResponse("", "User registered successfully"));
         }

@@ -32,6 +32,23 @@ namespace JobsTracker.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateJob(CreateJobDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState
+                    .Where(x => x.Value!.Errors.Count > 0)
+                    .ToDictionary(
+                        kvp => kvp.Key,
+                        kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Validation failed",
+                    errors
+                });
+            }
+
             var userId = GetUserId();
             var jobId = await _jobService.CreateJobAsync(userId, dto);
             return Ok(ApiResponse<Guid>.SuccessResponse(jobId, "Job created successfully"));
