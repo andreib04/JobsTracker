@@ -46,11 +46,11 @@ namespace JobsTracker.Application.UseCases
 
             if(user == null || !_passwordHasher.Verify(dto.Password, user.PasswordHash))
             {
+                _logger.LogWarning("Failed login attempt for email {Email}.", dto.Email);
                 throw new Exception("Invalid email or password.");
             }
 
             _logger.LogInformation("User {Email} logged in successfully.", dto.Email);
-            _logger.LogWarning("Failed login attempt for email {Email}.", dto.Email);
 
             return _jwtProvider.GenerateToken(user);
         }

@@ -4,8 +4,21 @@ using JobsTracker.API.Extensions;
 using JobsTracker.API.Middleware;
 using JobsTracker.Application.Validators;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .WriteTo.File(
+        "logs/log-.txt",
+        rollingInterval: RollingInterval.Day,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}"
+    )
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog();
 
 //Validation services
 builder.Services.AddFluentValidationAutoValidation();

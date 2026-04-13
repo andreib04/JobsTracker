@@ -22,7 +22,6 @@ namespace JobsTracker.Application.UseCases
             var note = new Note(dto.Content, jobId);
             await _noteRepository.AddAsync(note);
             _logger.LogInformation("Note added to job {JobId}", jobId);
-            _logger.LogWarning("Attempt to add note to non-existing job {JobId}", jobId);
         }
 
         public async Task<List<string>> GetNotesAsync(Guid jobId)

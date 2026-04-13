@@ -60,12 +60,15 @@ namespace JobsTracker.Application.UseCases
             var job = await _jobRepository.GetByIdAsync(jobId);
 
             if(job == null || job.UserId != userId)
+            {
+                _logger.LogWarning("Job {JobId} not found for user {UserId}", jobId, userId);
                 throw new KeyNotFoundException("Job not found or access denied.");
+            }
+                
         
             job.UpdateStatus((JobStatus)status);
 
             _logger.LogInformation("User {UserId} updated job {JobId} status to {Status}", userId, jobId, status);
-            _logger.LogWarning("Job {JobId} not found for user {UserId}", jobId, userId);
 
             await _jobRepository.UpdateAsync(job);
         }
@@ -75,10 +78,12 @@ namespace JobsTracker.Application.UseCases
             var job = await _jobRepository.GetByIdAsync(jobId);
 
             if(job == null || job.UserId != userId)
-                throw new KeyNotFoundException("Job not found or access denied.");
+            {
+                _logger.LogWarning("Job {JobId} not found for user {UserId}", jobId, userId);
+                throw new KeyNotFoundException("Job not found or access denied."); 
+            }
 
             _logger.LogWarning("User {UserId} deleted job {JobId}", userId, jobId);
-            _logger.LogWarning("Job {JobId} not found for user {UserId}", jobId, userId);
 
             await _jobRepository.DeleteAsync(job);
         }
